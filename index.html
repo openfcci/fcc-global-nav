@@ -522,58 +522,110 @@ padding-top: 10px !important;
 </script>
 
 <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-
 <style>
 
-	#nav-wrap{
-		top: 30px;
-	}
-	#menufication-top{
-		top: 30px;
-	}
 
-	#globalnav--wrap{
-		background-color: #393a39;
-		font-family: 'Oswald', sans-serif;
-		color: #d5d5d5;
-		height: 30px;
-		width: 100%;
-		position: fixed;
-		top: 0;
-		left: 0;
-		box-sizing: border-box;
-		border-bottom: 1px solid #2f2f2f;
-	}
-	#globalnav--wrap a{
-		color: #d5d5d5;
-		text-decoration: none;
-	}
-	#globalnav--wrap a:hover{
-		color: #fff;
-	}
-	#globalnav--inner{
-		float: right;
-	}
-	#globalnav--logo--wrap, #globalnav--channels, #globalnav--login{
-		float: left;
-		display: inline-block;
-		height: 28px;
-		padding: 0 5px;
-		border-right: 1px solid #2f2f2f;
-		}
+/* -----------GLOBAL NAV ----------*/
 
-	#globalnav--channels, #globalnav--login{
-		text-align: center;
-		vertical-align: middle;
-		line-height: 30px;    
-		font-size: 12px;
-		border-left: 1px solid #555555;
-	}
-	#globalnav--logo{
-		height: 30px;
-	}
+#nav-wrap{
+    top: 30px;
+  }
+  #menufication-top{
+    top: 30px;
+  }
+
+  #globalnav--wrap{
+    background-color: #393a39;
+    font-family: 'Oswald', sans-serif;
+    color: #d5d5d5;
+    height: 30px;
+    width: 100%;
+    font-weight: 600;
+    position: fixed;
+    z-index: 3001;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid #2f2f2f;
+  }
+
+  #globalnav--wrap a{
+    color: #d5d5d5;
+    text-decoration: none;
+  }
+  #globalnav--wrap a:hover{
+    color: #fff;
+  }
+  
+  
+  #globalnav--inner{
+    float: right;
+  }
+  #globalnav--logo--wrap, #globalnav--channels, #globalnav--login{
+    float: left;
+    display: inline-block;
+    height: 28px;
+    padding: 0 5px;
+    border-right: 1px solid #2f2f2f;
+    }
+
+  #globalnav--channels, #globalnav--login{
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;    
+    font-size: 12px;
+    border-left: 1px solid #555555;
+  }
+  #globalnav--logo{
+    height: 30px;
+  }
+
+
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    right: -5px;
+    z-index: 3001;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  background-color: #393a39;
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid #2f2f2f;
+    border-top: 1px solid #555555;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #222}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover{
+    color: #fff;
+    cursor: pointer;
+}
+
+
 </style>
-
 </head>
 
 <body class="home blog">
@@ -581,10 +633,25 @@ padding-top: 10px !important;
 	<header>
 
 
-		<div id="globalnav--wrap">
+
+
+
+
+
+		<div id="globalnav--wrap" class="main-nav">
 		<div id="globalnav--inner">
 			<div id="globalnav--logo--wrap"><img id="globalnav--logo" src="http://areavoices.com/wp-content/blogs.dir/1/files/2015/05/areavoices_logo6.png"></div>
-			<div id="globalnav--channels"><a href="#">CHANNELS &#9660;<a></div>
+			<div id="globalnav--channels">
+				<div class="dropdown ">
+				  CHANNELS &#9660;
+				  <div class="dropdown-content ">
+				    <a href="#"><img src="images/AreaVoices_logo.png"></a>
+				    <a href="#"><img style="width: 60%;" src="images/Northland-Outdoors-Logo.png"></a>
+				    <a href="#"><img src="images/SAB_mobile.png"></a>
+				    <a href="#"><img src="images/bisonmedia_logo.png"></a>
+				  </div>
+				</div>
+			</div>
 			<div id="globalnav--login"><a href="#">LOG IN</a></div>
 			</div>
 		</div>
