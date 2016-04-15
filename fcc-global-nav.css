@@ -1,0 +1,13 @@
+/*--------------------------------------------------------------
+# AreaVoices Global Nav CSS
+--------------------------------------------------------------*/
+
+/*#wpadminbar .quicklinks .ab-top-secondary>li {
+    float: right
+}*/
+
+/* Unregister wp-admin bar css?*/
+
+#wp-admin-bar-av-logo {
+  float: right !important;
+}
