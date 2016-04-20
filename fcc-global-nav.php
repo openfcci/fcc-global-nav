@@ -64,6 +64,7 @@ function remove_admin_bar_links() {
     /* Secondary Group: Right Side (wp-admin-bar-top-secondary)
 			HTML Order:   Search, My Account, Debug Bar
 			Screen Order: Debug, My Account, Search */
+		$wp_admin_bar->remove_menu('debug-bar');
 		$wp_admin_bar->remove_menu('search');
     $wp_admin_bar->remove_menu('my-account');       // Remove the user details tab
 
@@ -159,7 +160,6 @@ function add_homepage_admin_bar_link( $wp_admin_bar ) {
 				'class'     => '$class',
 			),
 		) );
-
 
 		/*$args = array(
 	    'id' => 'av-login',
