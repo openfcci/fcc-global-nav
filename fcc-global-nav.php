@@ -16,6 +16,11 @@ defined( 'ABSPATH' ) || exit;
 --------------------------------------------------------------*/
 
 function fcc_gn_register_plugin_styles() {
+if ( ! is_admin() ) {
+
+	wp_dequeue_style( 'admin-bar' );
+
+}
 	wp_enqueue_style( 'fcc_wpadminbar_css', plugin_dir_url( __FILE__ ) . '/fcc-global-nav.css' );
 }
 add_action( 'wp_enqueue_scripts', 'fcc_gn_register_plugin_styles' );
@@ -81,7 +86,7 @@ add_action( 'admin_bar_menu', 'add_av_logo_admin_bar_link', 1 );
 	$wp_admin_bar->add_menu( array(
 		'id'    => 'av-logo',
 		//'title' => '<span class="ab-icon"></span><span class="screen-reader-text">' . __( 'AreaVoices Homepage' ) . '</span>',
-		'title' => __( 'AreaVoices' ),
+		'title' => __( '' ),
 		'href'  => '//areavoices.com',
 	) );
 }
@@ -111,23 +116,27 @@ function fcc_add_channels( $wp_admin_bar ) {
 
 // Add child items
 $wp_admin_bar->add_node( array(
+	'id'        => 'areavoices',
     'parent' => 'av-channels',
-    'title' => 'AreaVoices',
+    'title' => '',
     'href' => '//areavoices.com',
     'meta' => FALSE) );
 $wp_admin_bar->add_node( array(
+	'id'        => 'northlandoutdoors',
     'parent' => 'av-channels',
-    'title' => 'Northland Outdoors',
+    'title' => '',
     'href' => '//northlandoutdoors.com',
     'meta' => FALSE) );
 $wp_admin_bar->add_node( array(
+	'id'        => 'sayanything',
     'parent' => 'av-channels',
-    'title' => 'Say Anything',
+    'title' => '',
     'href' => '//sayanythingblog.com',
     'meta' => FALSE) );
 $wp_admin_bar->add_node( array(
+	'id'        => 'bisonmedia',
     'parent' => 'av-channels',
-    'title' => 'Bison Media',
+    'title' => '',
     'href' => '//bisonmedia.areavoices.com',
     'meta' => FALSE) );
 }
