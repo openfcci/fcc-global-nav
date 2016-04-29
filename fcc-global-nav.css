@@ -20,7 +20,7 @@
 	background-size: 99px 30px;
   background-repeat: no-repeat;
   background-position: center;
-  width: 107px;
+  width: 120px;
   box-sizing: border-box;
   border-right: 1px solid #222;
   opacity: 0.8;
@@ -38,8 +38,9 @@
 }
 
 /* menu items */
-#wp-admin-bar-top-secondary .menupop {
+#wp-admin-bar-top-secondary .menupop, #wp-admin-bar-top-secondary li {
 	border-left: 1px solid #444;
+	 border-right: 1px solid #222;
 }
 
 /* link hover */
