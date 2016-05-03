@@ -159,11 +159,19 @@
 	background-position: center;
 }
 
-@media screen and ( max-width: 782px ) {
-	#wp-admin-bar-av-logo {
-	padding-left: 10px;
-	float: left;
-	}
+#wp-admin-bar-top-secondary, #wpadminbar ul {
+    -webkit-padding-start: 0px;
+}
+
+@media screen and ( max-width: 782px) {
+    #wp-admin-bar-av-logo {
+        padding-left: 10px;
+        float: left;
+        border-right: none;
+    }
+    #wpadminbar .quicklinks > ul > li > a {
+        padding: 0 10px;
+    }
 }
 
 /*--------------------------------------------------------------
