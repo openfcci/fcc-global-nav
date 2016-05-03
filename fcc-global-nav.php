@@ -4,7 +4,7 @@ Plugin Name: FCC Global Nav
 Plugin URI: https://github.com/openfcci/fcc-global-nav
 Description: AreaVoices network global navigation plugin.
 Author: Forum Communications Company
-Version: 0.16.04.29
+Version: 1.16.05.03
 Author URI: http://forumcomm.com/
 */
 
@@ -12,32 +12,35 @@ Author URI: http://forumcomm.com/
 defined( 'ABSPATH' ) || exit;
 
 /*--------------------------------------------------------------
-# Load CSS
+# Load JS
+--------------------------------------------------------------*/
+
+wp_register_script( 'globalnav-clicktracking', plugin_dir_url( __FILE__ ) . '/js/globalnav-clicktracking.js', array('jquery'), '', true);
+wp_enqueue_script('globalnav-clicktracking');
+
+/*--------------------------------------------------------------
+# Load CSS (Front End Only)
 --------------------------------------------------------------*/
 
 function fcc_gn_register_plugin_styles() {
-if ( ! is_admin() ) {
-
-	wp_dequeue_style( 'admin-bar' );
-
-}
-	wp_enqueue_style( 'fcc_wpadminbar_css', plugin_dir_url( __FILE__ ) . '/fcc-global-nav.css' );
+  if ( ! is_admin() ) {
+    wp_dequeue_style( 'admin-bar' );
+  }
+  wp_enqueue_style( 'fcc_wpadminbar_css', plugin_dir_url( __FILE__ ) . '/fcc-global-nav.css' );
 }
 add_action( 'wp_enqueue_scripts', 'fcc_gn_register_plugin_styles' );
 
-
 /*--------------------------------------------------------------
-# Always Show Admin Bar
+# Display the Admin Bar for Logged Out Users (Front End Only)
 --------------------------------------------------------------*/
 
 function fcc_always_show_admin_bar() {
 	return true;
 }
 add_filter('show_admin_bar', 'fcc_always_show_admin_bar');
-//add_filter('show_admin_bar', 'fcc_always_show_admin_bar', 1000 ); // Priority for Styles
 
 function fcc_admin_bar_space() {
-	if ( is_admin_bar_showing() ) {
+	if ( ! is_admin() && is_admin_bar_showing() ) { // is_user_logged_in()
 		echo "
 			<style type='text/css'>
 			#nav-wrap {top: 32px !important;}
@@ -47,45 +50,58 @@ function fcc_admin_bar_space() {
 }
 add_action( 'wp_head', 'fcc_admin_bar_space' );
 
-
 /*--------------------------------------------------------------
-# Remove Default Menu Items
+# Remove All Default Menu Items/Nodes (Front End Only)
 --------------------------------------------------------------*/
 
-function remove_admin_bar_links() {
+function fcc_remove_default_nodes() {
+	global $wp_admin_bar;
+
+	if ( ! is_object($wp_admin_bar) or is_admin() ) {
+		return;
+	}
+
+  $nodes = $wp_admin_bar->get_nodes();
+  foreach( $nodes as $node ) {
+		if( ! $node->parent || 'top-secondary' == $node->parent ) {
+			// 'top-secondary' is used for the User Actions right side menu
+			$wp_admin_bar->remove_menu( $node->id );
+		}
+	}
+
+}
+add_action( 'admin_bar_menu', 'fcc_remove_default_nodes', 200 );
+
+/**
+ * Remove Debug Bar Link on Front End
+ */
+function remove_debug_bar_link() {
 	if ( ! is_admin() ) {
     global $wp_admin_bar;
-
-		/* Default Group: Left Side (wp-admin-bar-root-default) */
-    $wp_admin_bar->remove_menu('wp-logo');          	// Remove the WordPress logo
-		$wp_admin_bar->remove_menu('my-sites');
-    $wp_admin_bar->remove_menu('site-name');        // Remove the site name menu
-		$wp_admin_bar->remove_menu('customize');
-		$wp_admin_bar->remove_menu('updates');          // Remove the updates link
-		$wp_admin_bar->remove_menu('comments');         // Remove the comments link
-		$wp_admin_bar->remove_menu('new-content');      // Remove the content link
-		$wp_admin_bar->remove_menu('stats');						// Remove Jetpack Stats
-
-    /* Secondary Group: Right Side (wp-admin-bar-top-secondary)
-			HTML Order:   Search, My Account, Debug Bar
-			Screen Order: Debug, My Account, Search */
-		$wp_admin_bar->remove_menu('debug-bar');
-		$wp_admin_bar->remove_menu('search');
-    $wp_admin_bar->remove_menu('my-account');       // Remove the user details tab
-
+		$wp_admin_bar->remove_menu('debug-bar'); // Remove the debug bar button. Priority 1000
 	}
 }
-add_action( 'wp_before_admin_bar_render', 'remove_admin_bar_links' );
+add_action( 'wp_before_admin_bar_render', 'remove_debug_bar_link' );
+
+/*--------------------------------------------------------------
+# Add Global Nav Menu Items (Front End Only)
+--------------------------------------------------------------*/
+
+if ( ! is_admin() ) {
+	add_action( 'admin_bar_menu', 'add_av_logo_admin_bar_link', 300 );
+	add_action( 'admin_bar_menu', 'fcc_add_channels', 500 );
+	add_action( 'admin_bar_menu', 'av_admin_bar_add_secondary_groups', 0 );
+	add_action( 'admin_bar_menu', 'add_homepage_admin_bar_link', 400 );
+}
 
 /*--------------------------------------------------------------
 # "AreaVoices" Logo Homepage Link
 --------------------------------------------------------------*/
 
-add_action( 'admin_bar_menu', 'add_av_logo_admin_bar_link', 1 );
-	function add_av_logo_admin_bar_link( $wp_admin_bar ) {
+function add_av_logo_admin_bar_link( $wp_admin_bar ) {
 	$wp_admin_bar->add_menu( array(
 		'id'    => 'av-logo',
-		//'title' => '<span class="ab-icon"></span><span class="screen-reader-text">' . __( 'AreaVoices Homepage' ) . '</span>',
+		'title' => '<span class="ab-icon"></span><span class="screen-reader-text">' . __( 'AreaVoices Homepage' ) . '</span>',
 		'title' => __( '' ),
 		'href'  => '//areavoices.com',
 	) );
@@ -95,10 +111,8 @@ add_action( 'admin_bar_menu', 'add_av_logo_admin_bar_link', 1 );
 # CHANNELS
 --------------------------------------------------------------*/
 
-add_action( 'admin_bar_menu', 'fcc_add_channels', 500 );
 function fcc_add_channels( $wp_admin_bar ) {
-
-	$wp_admin_bar->add_menu( array(
+    $wp_admin_bar->add_menu( array(
 		'id'        => 'av-channels',
 		'parent'    => 'top-secondary',
 		'title'     => 'Channels',
@@ -108,33 +122,27 @@ function fcc_add_channels( $wp_admin_bar ) {
 		),
 	) );
 
-  /*$args = array(
-    'id' => 'channels',
-    'title' => __( 'Channels' ),
-    'href' => false);
-  $wp_admin_bar->add_node($args);*/
-
-// Add child items
-$wp_admin_bar->add_node( array(
-	'id'        => 'areavoices',
+  // Add child items
+  $wp_admin_bar->add_node( array(
+    'id' => 'areavoices',
     'parent' => 'av-channels',
     'title' => '',
     'href' => '//areavoices.com',
     'meta' => FALSE) );
-$wp_admin_bar->add_node( array(
-	'id'        => 'northlandoutdoors',
+  $wp_admin_bar->add_node( array(
+    'id' => 'northlandoutdoors',
     'parent' => 'av-channels',
     'title' => '',
     'href' => '//northlandoutdoors.com',
     'meta' => FALSE) );
-$wp_admin_bar->add_node( array(
-	'id'        => 'sayanything',
+  $wp_admin_bar->add_node( array(
+    'id' => 'sayanything',
     'parent' => 'av-channels',
     'title' => '',
     'href' => '//sayanythingblog.com',
     'meta' => FALSE) );
-$wp_admin_bar->add_node( array(
-	'id'        => 'bisonmedia',
+  $wp_admin_bar->add_node( array(
+  	'id' => 'bisonmedia',
     'parent' => 'av-channels',
     'title' => '',
     'href' => '//bisonmedia.areavoices.com',
@@ -144,66 +152,43 @@ $wp_admin_bar->add_node( array(
 /*--------------------------------------------------------------
 # Account
 --------------------------------------------------------------*/
-add_action( 'admin_bar_menu', 'av_admin_bar_add_secondary_groups', 0 );
+
 function av_admin_bar_add_secondary_groups( $wp_admin_bar ) {
-	$wp_admin_bar->add_group( array(
-		'id'     => 'top-secondary',
-		'meta'   => array(
-			'class' => 'ab-top-secondary',
-		),
-	) );
+  $wp_admin_bar->add_group( array(
+    'id'     => 'top-secondary',
+		'meta'   => array('class' => 'ab-top-secondary')
+  ));
 }
 
-add_action( 'admin_bar_menu', 'add_homepage_admin_bar_link', 400 );
 function add_homepage_admin_bar_link( $wp_admin_bar ) {
-	$user_id = get_current_user_id();
-
-	if ( ! $user_id ) {
-		// Show 'Log In'
+  $user_id = get_current_user_id();
+  if ( ! $user_id ) { // Show 'Log In'
 		$wp_admin_bar->add_menu( array(
 			'id'        => 'av-login',
 			'parent'    => 'top-secondary',
 			'title'     => 'Log In',
 			'href'      => wp_login_url(),
-			'meta'      => array(
-				'class'     => '$class',
-			),
-		) );
-
-		/*$args = array(
-	    'id' => 'av-login',
-	    'title' => __( 'Log In' ),
-	    'href' => wp_login_url()
-	  );
-	  $wp_admin_bar->add_node($args);*/
-	} else {
-		// Show 'Dashboard'
-		$wp_admin_bar->add_menu( array(
-			'id'        => 'av-account',
-			'parent'    => 'top-secondary',
-			'title'     => 'Account',
-			'href'      => FALSE,
-			'meta'      => array(
-				'class'     => '$class',
-			),
-		) );
-
-		/*$args = array(
-	    'id' => 'av-account',
-	    'title' => __( 'Account' ),
-	    'href' => FALSE
-	  );
-	  $wp_admin_bar->add_node($args);*/
-
-		$wp_admin_bar->add_node( array(
-		    'parent' => 'av-account',
-		    'title' => 'Dashboard',
-		    'href' => admin_url(),
-		    'meta' => FALSE) );
-		$wp_admin_bar->add_node( array(
-		    'parent' => 'av-account',
-		    'title' => 'Log Out',
-		    'href' => wp_logout_url(),
-		    'meta' => FALSE) );
-	}
+			'meta'      => array('class' => '$class')
+		));
+    } else { // Show 'Dashboard'
+      $wp_admin_bar->add_menu( array(
+        'id'      => 'av-account',
+  			'parent'  => 'top-secondary',
+  			'title'   => 'Account',
+  			'href'    => FALSE,
+  			'meta'    => array('class'=> '$class')
+      ));
+      $wp_admin_bar->add_node( array(
+        'parent'  => 'av-account',
+		    'title'   => 'Dashboard',
+		    'href'    => admin_url(),
+		    'meta'    => FALSE
+      ));
+      $wp_admin_bar->add_node( array(
+        'parent'  => 'av-account',
+		    'title'   => 'Log Out',
+		    'href'    => wp_logout_url(),
+		    'meta'     => FALSE
+      ));
+    }
 }
