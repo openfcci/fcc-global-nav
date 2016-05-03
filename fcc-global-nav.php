@@ -123,29 +123,29 @@ function fcc_add_channels( $wp_admin_bar ) {
 	) );
 
   // Add child items
-  $wp_admin_bar->add_node( array(
+	$wp_admin_bar->add_node( array(
     'id' => 'areavoices',
     'parent' => 'av-channels',
     'title' => '',
-    'href' => '//areavoices.com',
+    'href' => 'http://areavoices.com',
     'meta' => FALSE) );
   $wp_admin_bar->add_node( array(
-    'id' => 'northlandoutdoors',
+    'id' => 'http:northlandoutdoors',
     'parent' => 'av-channels',
     'title' => '',
-    'href' => '//northlandoutdoors.com',
+    'href' => 'http://northlandoutdoors.com',
     'meta' => FALSE) );
   $wp_admin_bar->add_node( array(
     'id' => 'sayanything',
     'parent' => 'av-channels',
     'title' => '',
-    'href' => '//sayanythingblog.com',
+    'href' => 'https://sayanythingblog.com',
     'meta' => FALSE) );
   $wp_admin_bar->add_node( array(
   	'id' => 'bisonmedia',
     'parent' => 'av-channels',
     'title' => '',
-    'href' => '//bisonmedia.areavoices.com',
+    'href' => 'http://bisonmedia.areavoices.com',
     'meta' => FALSE) );
 }
 
