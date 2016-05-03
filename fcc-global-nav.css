@@ -172,6 +172,9 @@
     #wpadminbar .quicklinks > ul > li > a {
         padding: 0 10px;
     }
+		#wpadminbar {
+			display: block !important;
+		}
 }
 
 /*--------------------------------------------------------------
