@@ -130,7 +130,7 @@ function fcc_add_channels( $wp_admin_bar ) {
     'href' => 'http://areavoices.com',
     'meta' => FALSE) );
   $wp_admin_bar->add_node( array(
-    'id' => 'http:northlandoutdoors',
+    'id' => 'northlandoutdoors',
     'parent' => 'av-channels',
     'title' => '',
     'href' => 'http://northlandoutdoors.com',
