@@ -142,7 +142,7 @@ function fcc_add_channels( $wp_admin_bar ) {
     'id' => 'sayanything',
     'parent' => 'av-channels',
     'title' => '',
-    'href' => 'https://sayanythingblog.com',
+    'href' => 'https://www.sayanythingblog.com',
     'meta' => FALSE) );
   $wp_admin_bar->add_node( array(
   	'id' => 'bisonmedia',
