@@ -4,7 +4,7 @@ Plugin Name: FCC Global Nav
 Plugin URI: https://github.com/openfcci/fcc-global-nav
 Description: AreaVoices network global navigation plugin.
 Author: Forum Communications Company
-Version: 1.16.05.12
+Version: 1.16.06.13
 Author URI: http://forumcomm.com/
 */
 
@@ -12,24 +12,26 @@ Author URI: http://forumcomm.com/
 defined( 'ABSPATH' ) || exit;
 
 // Do not run on Forumcomm.com
-if ( get_current_blog_id() == '67574' ) return;
+if ( '67574' == get_current_blog_id() ) {
+	return;
+}
 
 /*--------------------------------------------------------------
 # Load JS
 --------------------------------------------------------------*/
 
-wp_register_script( 'globalnav-clicktracking', plugin_dir_url( __FILE__ ) . '/js/globalnav-clicktracking.js', array('jquery'), '', true);
-wp_enqueue_script('globalnav-clicktracking');
+wp_register_script( 'globalnav-clicktracking', plugin_dir_url( __FILE__ ) . '/js/globalnav-clicktracking.js', array( 'jquery' ), '', true );
+wp_enqueue_script( 'globalnav-clicktracking' );
 
 /*--------------------------------------------------------------
 # Load CSS (Front End Only)
 --------------------------------------------------------------*/
 
 function fcc_gn_register_plugin_styles() {
-  if ( ! is_admin() ) {
-    wp_dequeue_style( 'admin-bar' );
-  }
-  wp_enqueue_style( 'fcc_wpadminbar_css', plugin_dir_url( __FILE__ ) . '/fcc-global-nav.css' );
+	if ( ! is_admin() ) {
+		wp_dequeue_style( 'admin-bar' );
+	}
+	wp_enqueue_style( 'fcc_wpadminbar_css', plugin_dir_url( __FILE__ ) . '/fcc-global-nav.css' );
 }
 add_action( 'wp_enqueue_scripts', 'fcc_gn_register_plugin_styles' );
 
@@ -40,7 +42,7 @@ add_action( 'wp_enqueue_scripts', 'fcc_gn_register_plugin_styles' );
 function fcc_always_show_admin_bar() {
 	return true;
 }
-add_filter('show_admin_bar', 'fcc_always_show_admin_bar');
+add_filter( 'show_admin_bar', 'fcc_always_show_admin_bar' );
 
 function fcc_admin_bar_space() {
 	if ( ! is_admin() && is_admin_bar_showing() ) { // is_user_logged_in()
@@ -60,13 +62,13 @@ add_action( 'wp_head', 'fcc_admin_bar_space' );
 function fcc_remove_default_nodes() {
 	global $wp_admin_bar;
 
-	if ( ! is_object($wp_admin_bar) or is_admin() ) {
+	if ( ! is_object( $wp_admin_bar ) or is_admin() ) {
 		return;
 	}
 
-  $nodes = $wp_admin_bar->get_nodes();
-  foreach( $nodes as $node ) {
-		if( ! $node->parent || 'top-secondary' == $node->parent ) {
+	$nodes = $wp_admin_bar->get_nodes();
+	foreach ( $nodes as $node ) {
+		if ( ! $node->parent || 'top-secondary' == $node->parent ) {
 			// 'top-secondary' is used for the User Actions right side menu
 			$wp_admin_bar->remove_menu( $node->id );
 		}
@@ -80,8 +82,8 @@ add_action( 'admin_bar_menu', 'fcc_remove_default_nodes', 200 );
  */
 function remove_debug_bar_link() {
 	if ( ! is_admin() ) {
-    global $wp_admin_bar;
-		$wp_admin_bar->remove_menu('debug-bar'); // Remove the debug bar button. Priority 1000
+		global $wp_admin_bar;
+		$wp_admin_bar->remove_menu( 'debug-bar' ); // Remove the debug bar button. Priority 1000
 	}
 }
 add_action( 'wp_before_admin_bar_render', 'remove_debug_bar_link' );
@@ -115,41 +117,48 @@ function add_av_logo_admin_bar_link( $wp_admin_bar ) {
 --------------------------------------------------------------*/
 
 function fcc_add_channels( $wp_admin_bar ) {
-    $wp_admin_bar->add_menu( array(
+	$wp_admin_bar->add_menu( array(
 		'id'        => 'av-channels',
 		'parent'    => 'top-secondary',
 		'title'     => 'Channels',
-		'href'      => FALSE,
+		'href'      => false,
 		'meta'      => array(
 			'class'     => 'channels',
 		),
 	) );
 
-  // Add child items
+	// Add child items
 	$wp_admin_bar->add_node( array(
-    'id' => 'areavoices',
-    'parent' => 'av-channels',
-    'title' => '',
-    'href' => 'http://areavoices.com',
-    'meta' => FALSE) );
-  $wp_admin_bar->add_node( array(
-    'id' => 'northlandoutdoors',
-    'parent' => 'av-channels',
-    'title' => '',
-    'href' => 'http://northlandoutdoors.com',
-    'meta' => FALSE) );
-  $wp_admin_bar->add_node( array(
-    'id' => 'sayanything',
-    'parent' => 'av-channels',
-    'title' => '',
-    'href' => 'https://www.sayanythingblog.com',
-    'meta' => FALSE) );
-  $wp_admin_bar->add_node( array(
-  	'id' => 'bisonmedia',
-    'parent' => 'av-channels',
-    'title' => '',
-    'href' => 'http://bisonmedia.areavoices.com',
-    'meta' => FALSE) );
+		'id' => 'areavoices',
+		'parent' => 'av-channels',
+		'title' => '',
+		'href' => 'http://areavoices.com',
+		'meta' => false,
+	));
+
+	$wp_admin_bar->add_node( array(
+		'id' => 'northlandoutdoors',
+		'parent' => 'av-channels',
+		'title' => '',
+		'href' => 'http://northlandoutdoors.com',
+		'meta' => false,
+	));
+
+	$wp_admin_bar->add_node( array(
+		'id' => 'sayanything',
+		'parent' => 'av-channels',
+		'title' => '',
+		'href' => 'https://www.sayanythingblog.com',
+		'meta' => false,
+	));
+
+	$wp_admin_bar->add_node( array(
+		'id' => 'bisonmedia',
+		'parent' => 'av-channels',
+		'title' => '',
+		'href' => 'http://bisonmedia.areavoices.com',
+		'meta' => false,
+	));
 }
 
 /*--------------------------------------------------------------
@@ -157,41 +166,42 @@ function fcc_add_channels( $wp_admin_bar ) {
 --------------------------------------------------------------*/
 
 function av_admin_bar_add_secondary_groups( $wp_admin_bar ) {
-  $wp_admin_bar->add_group( array(
-    'id'     => 'top-secondary',
-		'meta'   => array('class' => 'ab-top-secondary')
-  ));
+	$wp_admin_bar->add_group( array(
+		'id' => 'top-secondary',
+		'meta' => array( 'class' => 'ab-top-secondary' ),
+	));
 }
 
 function add_homepage_admin_bar_link( $wp_admin_bar ) {
-  $user_id = get_current_user_id();
-  if ( ! $user_id ) { // Show 'Log In'
+	$user_id = get_current_user_id();
+
+	if ( ! $user_id ) { // Show 'Log In'
 		$wp_admin_bar->add_menu( array(
 			'id'        => 'av-login',
 			'parent'    => 'top-secondary',
 			'title'     => 'Log In',
 			'href'      => wp_login_url(),
-			'meta'      => array('class' => '$class')
+			'meta'      => array( 'class' => '$class' ),
 		));
-    } else { // Show 'Dashboard'
-      $wp_admin_bar->add_menu( array(
-        'id'      => 'av-account',
-  			'parent'  => 'top-secondary',
-  			'title'   => 'Account',
-  			'href'    => FALSE,
-  			'meta'    => array('class'=> '$class')
-      ));
-      $wp_admin_bar->add_node( array(
-        'parent'  => 'av-account',
-		    'title'   => 'Dashboard',
-		    'href'    => admin_url(),
-		    'meta'    => FALSE
-      ));
-      $wp_admin_bar->add_node( array(
-        'parent'  => 'av-account',
-		    'title'   => 'Log Out',
-		    'href'    => wp_logout_url(),
-		    'meta'     => FALSE
-      ));
-    }
+	} else { // Show 'Dashboard'
+		$wp_admin_bar->add_menu( array(
+			'id'      => 'av-account',
+			'parent'  => 'top-secondary',
+			'title'   => 'Account',
+			'href'    => false,
+			'meta'    => array( 'class' => '$class' ),
+		));
+		$wp_admin_bar->add_node( array(
+			'parent'  => 'av-account',
+			'title'   => 'Dashboard',
+			'href'    => admin_url(),
+			'meta'    => false,
+		));
+		$wp_admin_bar->add_node( array(
+			'parent'  => 'av-account',
+			'title'   => 'Log Out',
+			'href'    => wp_logout_url(),
+			'meta'     => false,
+		));
+	}
 }
