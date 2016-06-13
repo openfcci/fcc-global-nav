@@ -83,7 +83,16 @@ add_action( 'admin_bar_menu', 'fcc_remove_default_nodes', 200 );
 function remove_debug_bar_link() {
 	if ( ! is_admin() ) {
 		global $wp_admin_bar;
-		$wp_admin_bar->remove_menu( 'debug-bar' ); // Remove the debug bar button. Priority 1000
+		// Remove the debug bar button. Priority 1000
+		$wp_admin_bar->remove_menu( 'debug-bar' );
+		// Add the 'Debug Bar' node to the 'Account' menu for Super Admins
+		if ( is_super_admin() || is_admin_bar_showing() || Debug_Bar::is_wp_login() ) {
+			$wp_admin_bar->add_node( array(
+				'parent'  => 'av-account',
+				'title'   => 'Debug Bar',
+				'meta'    => false,
+			));
+		}
 	}
 }
 add_action( 'wp_before_admin_bar_render', 'remove_debug_bar_link' );
