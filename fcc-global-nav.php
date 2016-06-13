@@ -90,7 +90,7 @@ function remove_debug_bar_link() {
 			$wp_admin_bar->add_node( array(
 				'parent'  => 'av-account',
 				'title'   => 'Debug Bar',
-				'meta'    => false,
+				'meta'    => array( 'class' => 'fcc-debug-bar' ),
 			));
 		}
 	}
@@ -190,7 +190,7 @@ function add_homepage_admin_bar_link( $wp_admin_bar ) {
 			'parent'    => 'top-secondary',
 			'title'     => 'Log In',
 			'href'      => wp_login_url(),
-			'meta'      => array( 'class' => '$class' ),
+			'meta'    => false,
 		));
 	} else { // Show 'Dashboard'
 		$wp_admin_bar->add_menu( array(
@@ -198,7 +198,7 @@ function add_homepage_admin_bar_link( $wp_admin_bar ) {
 			'parent'  => 'top-secondary',
 			'title'   => 'Account',
 			'href'    => false,
-			'meta'    => array( 'class' => '$class' ),
+			'meta'    => false,
 		));
 		$wp_admin_bar->add_node( array(
 			'parent'  => 'av-account',

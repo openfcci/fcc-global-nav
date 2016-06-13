@@ -978,3 +978,7 @@ html:lang(he-il) .rtl #wpadminbar *  {
 	color: #fff;
 }
 /* End no @font-face */
+
+li #wp-admin-bar-debug-bar > div {
+	color: rgba( 135, 166, 188, .8 ) !important;
+}
