@@ -4,7 +4,7 @@ Plugin Name: FCC Global Nav
 Plugin URI: https://github.com/openfcci/fcc-global-nav
 Description: AreaVoices network global navigation plugin.
 Author: Forum Communications Company
-Version: 1.16.09.28
+Version: 1.16.10.20
 Author URI: http://forumcomm.com/
 */
 
@@ -22,6 +22,9 @@ $site_exceptions = array(
 );
 if ( in_array( get_current_blog_id(), $site_exceptions ) ) {
 	return;
+} else {
+	# set constant for other plugins and themes to check against
+	define( 'FCC__GLOBAL_NAV', true );
 }
 
 /*--------------------------------------------------------------
